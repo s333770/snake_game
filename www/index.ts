@@ -2,9 +2,13 @@ import init, {World} from "snake-game";
 
 init().then(_=>{
     const CELL_SIZE=20;
-    const world=World.new();
+    const WORLD_WIDTH=32;
+    const snakeSpawnIdx=Date.now()%(WORLD_WIDTH*WORLD_WIDTH);
+
+
+    const world=World.new(WORLD_WIDTH, snakeSpawnIdx);
     const worldWidth=world.width();
-    const canvas=document.getElementById("snake-canvas");
+    const canvas=<HTMLCanvasElement>document.getElementById("snake-canvas");
     const ctx=canvas.getContext("2d");
     canvas.height=worldWidth*CELL_SIZE;
     canvas.width=worldWidth*CELL_SIZE;
@@ -41,12 +45,13 @@ function drawSnake(){
         drawSnake();
     }
     function update(){
+        const fps=3;
         setTimeout(()=>{
             ctx.clearRect(0,0,canvas.width,canvas.height);
             world.update();
             paint();
             requestAnimationFrame(update)
-        },200)
+        },1000/fps)
     }
     paint();
     update();
